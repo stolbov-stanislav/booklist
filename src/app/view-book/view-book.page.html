@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [text]="getBackButtonText()" defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="book">
+  <div class="ion-padding">
+    <h1>{{ book.title }}</h1>
+    <p>
+      Author: <em>{{ book.author }}</em>
+    </p>
+    <p>
+      Genre: <em>{{ book.genre }}</em>
+    </p>
+    <p>
+      Language: <em>{{ book.language }}</em>
+    </p>
+    <p>
+      Pages: <em>{{ book.pagesCount }}</em>
+    </p>
+  </div>
+</ion-content>

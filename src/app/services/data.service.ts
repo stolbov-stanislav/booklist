@@ -1,83 +1,68 @@
 import { Injectable } from '@angular/core';
 
-export interface Message {
-  fromName: string;
-  subject: string;
-  date: string;
-  id: number;
-  read: boolean;
+export interface Book {
+  id: number,
+  title: string;
+  author: string;
+  pagesCount: number;
+  language: string;
+  genre: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  public messages: Message[] = [
+  public books: Book[] = [
     {
-      fromName: 'Matt Chorsey',
-      subject: 'New event: Trip to Vegas',
-      date: '9:32 AM',
+      title: 'New event: Trip to Vegas',
+      author: 'Matt Chorsey',
+      pagesCount: 32,
+      language: 'English',
+      genre: 'fiction',
       id: 0,
-      read: false
     },
     {
-      fromName: 'Lauren Ruthford',
-      subject: 'Long time no chat',
-      date: '6:12 AM',
+      title: 'Lolita',
+      author: 'Nabokov',
+      pagesCount: 200,
+      language: 'Russian',
+      genre: 'fiction',
       id: 1,
-      read: false
     },
     {
-      fromName: 'Jordan Firth',
-      subject: 'Report Results',
-      date: '4:55 AM',
+      title: 'Deep into Universe',
+      author: 'Hawking',
+      pagesCount: 100,
+      language: 'English',
+      genre: 'non-fiction',
       id: 2,
-      read: false
     },
     {
-      fromName: 'Bill Thomas',
-      subject: 'The situation',
-      date: 'Yesterday',
+      title: 'The old man and the sea',
+      author: 'Hemingway',
+      pagesCount: 70,
+      language: 'English',
+      genre: 'fiction',
       id: 3,
-      read: false
     },
     {
-      fromName: 'Joanne Pollan',
-      subject: 'Updated invitation: Swim lessons',
-      date: 'Yesterday',
+      title: 'The Great Gatsby',
+      author: 'Fitzgerald',
+      pagesCount: 220,
+      language: 'English',
+      genre: 'fiction',
       id: 4,
-      read: false
     },
-    {
-      fromName: 'Andrea Cornerston',
-      subject: 'Last minute ask',
-      date: 'Yesterday',
-      id: 5,
-      read: false
-    },
-    {
-      fromName: 'Moe Chamont',
-      subject: 'Family Calendar - Version 1',
-      date: 'Last Week',
-      id: 6,
-      read: false
-    },
-    {
-      fromName: 'Kelly Richardson',
-      subject: 'Placeholder Headhots',
-      date: 'Last Week',
-      id: 7,
-      read: false
-    }
   ];
 
   constructor() { }
 
-  public getMessages(): Message[] {
-    return this.messages;
+  public getBooks(): Book[] {
+    return this.books;
   }
 
-  public getMessageById(id: number): Message {
-    return this.messages[id];
+  public getBookById(id: number): Book {
+    return this.books[id];
   }
 }
