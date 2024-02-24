@@ -11,6 +11,9 @@
         <ion-select aria-label="Author" placeholder="Filter by author" [multiple]="true" (ionChange)="handleFilterByAuthor($event)">
           <ion-select-option *ngFor="let author of authors" value={{author}}>{{author}}</ion-select-option>
         </ion-select>
+        <ion-select aria-label="Language" placeholder="Filter by language" [multiple]="true" (ionChange)="handleFilterByLanguage($event)">
+          <ion-select-option *ngFor="let language of languages" value={{language}}>{{language}}</ion-select-option>
+        </ion-select>
       </ion-item>
     </ion-list>
   </ion-toolbar>

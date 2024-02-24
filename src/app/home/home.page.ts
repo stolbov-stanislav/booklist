@@ -13,9 +13,11 @@ export class HomePage {
   private data = inject(DataService);
 
   public authors = new Set(this.getBooks().map((d) => d.author));
+  public languages = new Set(this.getBooks().map((d) => d.language));
 
   public searchFilterToken = '';
   public authorFilterTokens: String[] = Array.from(this.authors);
+  public languageFilterTokens: String[] = Array.from(this.languages);
   public filteredBooks = this.getBooks();
 
   constructor() {}
@@ -33,7 +35,8 @@ export class HomePage {
   runGeneralFilter() {
     this.filteredBooks = this.getBooks()
       .filter((d) => (d.title.toLowerCase().indexOf(this.searchFilterToken) > -1) || (d.author.toLowerCase().indexOf(this.searchFilterToken) > -1))
-      .filter((d) => this.authorFilterTokens.includes(d.author));
+      .filter((d) => this.authorFilterTokens.includes(d.author))
+      .filter((d) => this.languageFilterTokens.includes(d.language));
   }
 
   handleSearchInput(event: IonSearchbarCustomEvent<SearchbarInputEventDetail>) {
@@ -44,6 +47,12 @@ export class HomePage {
   handleFilterByAuthor(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
     const query: String[] = event.detail.value;
     this.authorFilterTokens = query.length > 0 ? query : Array.from(this.authors);
+    this.runGeneralFilter();
+  }
+
+  handleFilterByLanguage(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
+    const query: String[] = event.detail.value;
+    this.languageFilterTokens = query.length > 0 ? query : Array.from(this.languages);
     this.runGeneralFilter();
   }
 }
