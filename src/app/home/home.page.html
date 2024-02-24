@@ -6,6 +6,13 @@
   </ion-toolbar>
   <ion-toolbar>
     <ion-searchbar show-clear-button="focus" (ionInput)="handleSearchInput($event)"></ion-searchbar>
+    <ion-list>
+      <ion-item>
+        <ion-select aria-label="Author" placeholder="Filter by author" [multiple]="true" (ionChange)="handleFilterByAuthor($event)">
+          <ion-select-option *ngFor="let author of authors" value={{author}}>{{author}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
   </ion-toolbar>
 </ion-header>
 
