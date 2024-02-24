@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { RefresherCustomEvent } from '@ionic/angular';
-import { BookComponent } from '../book/book.component';
+import { RefresherCustomEvent, SearchbarInputEventDetail } from '@ionic/angular';
+import { IonSearchbarCustomEvent } from '@ionic/core';
 
 import { DataService, Book } from '../services/data.service';
 
@@ -11,6 +11,10 @@ import { DataService, Book } from '../services/data.service';
 })
 export class HomePage {
   private data = inject(DataService);
+
+  public searchFilterToken = '';
+  public filteredBooks = this.getBooks();
+
   constructor() {}
 
   refresh(ev: any) {
@@ -21,5 +25,15 @@ export class HomePage {
 
   getBooks(): Book[] {
     return this.data.getBooks();
+  }
+
+  runGeneralFilter() {
+    this.filteredBooks = this.getBooks()
+      .filter((d) => (d.title.toLowerCase().indexOf(this.searchFilterToken) > -1) || (d.author.toLowerCase().indexOf(this.searchFilterToken) > -1));
+  }
+
+  handleSearchInput(event: IonSearchbarCustomEvent<SearchbarInputEventDetail>) {
+    this.searchFilterToken = event.detail.value?.toLowerCase() || '';
+    this.runGeneralFilter();
   }
 }

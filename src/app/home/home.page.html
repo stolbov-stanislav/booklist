@@ -4,6 +4,9 @@
       Books
     </ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar show-clear-button="focus" (ionInput)="handleSearchInput($event)"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -20,6 +23,6 @@
   </ion-header>
   
   <ion-list>
-    <app-book *ngFor="let book of getBooks()" [book]="book"></app-book>
+    <app-book *ngFor="let book of filteredBooks" [book]="book"></app-book>
   </ion-list>
 </ion-content>
