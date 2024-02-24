@@ -16,12 +16,14 @@ export class HomePage {
   public languages = new Set(this.getBooks().map((d) => d.language));
   public minPages = this.getBooks().reduce((prev, curr) => prev.pagesCount < curr.pagesCount ? prev : curr).pagesCount;
   public maxPages = this.getBooks().reduce((prev, curr) => prev.pagesCount > curr.pagesCount ? prev : curr).pagesCount;
+  public genres = new Set(this.getBooks().map((d) => d.genre)).add('all');
 
   public searchFilterToken = '';
   public authorFilterTokens: String[] = Array.from(this.authors);
   public languageFilterTokens: String[] = Array.from(this.languages);
   public pageMinFilterToken = this.minPages;
   public pageMaxFilterToken = this.maxPages;
+  public genreFilterToken = '';
   public filteredBooks = this.getBooks();
 
   constructor() {}
@@ -42,7 +44,8 @@ export class HomePage {
       .filter((d) => this.authorFilterTokens.includes(d.author))
       .filter((d) => this.languageFilterTokens.includes(d.language))
       .filter((d) => d.pagesCount >= this.pageMinFilterToken)
-      .filter((d) => d.pagesCount <= this.pageMaxFilterToken);
+      .filter((d) => d.pagesCount <= this.pageMaxFilterToken)
+      .filter((d) => this.genreFilterToken ? d.genre === this.genreFilterToken: true);
   }
 
   handleSearchInput(event: IonSearchbarCustomEvent<SearchbarInputEventDetail>) {
@@ -74,4 +77,9 @@ export class HomePage {
     this.runGeneralFilter();
   }
   
+  handleFilterByGenre(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
+    const query = event.detail.value;
+    this.genreFilterToken = query === 'all' ? '' : query;
+    this.runGeneralFilter();
+  }
 }

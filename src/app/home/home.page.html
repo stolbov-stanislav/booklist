@@ -21,6 +21,11 @@
         <ion-input label="Pages min:" type="number" inputmode="numeric" value={{minPages}} min={{minPages}} max={{maxPages}} (ionInput)="handleFilterByPagesMin($event)"></ion-input>
         <ion-input label="Pages max:" type="number" inputmode="numeric" value={{maxPages}} min={{minPages}} max={{maxPages}} (ionInput)="handleFilterByPagesMax($event)"></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-select aria-label="Genre" placeholder="Filter by genre" (ionChange)="handleFilterByGenre($event)">
+          <ion-select-option *ngFor="let genre of genres" value={{genre}}>{{genre}}</ion-select-option>
+        </ion-select>
+      </ion-item>
     </ion-list>
   </ion-toolbar>
 </ion-header>
