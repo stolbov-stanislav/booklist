@@ -1,0 +1,16 @@
+.filters {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  .pages {
+    ion-input {
+      width: 10em;
+      
+      &:first-child {
+        margin-right: 1em;
+      }
+    }
+  }
+}

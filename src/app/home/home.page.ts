@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RefresherCustomEvent, SearchbarInputEventDetail, SelectChangeEventDetail } from '@ionic/angular';
-import { IonSearchbarCustomEvent, IonSelectCustomEvent } from '@ionic/core';
+import { IonSearchbarCustomEvent, IonSelectCustomEvent, IonInputCustomEvent, InputInputEventDetail } from '@ionic/core';
 
 import { DataService, Book } from '../services/data.service';
 
@@ -14,10 +14,14 @@ export class HomePage {
 
   public authors = new Set(this.getBooks().map((d) => d.author));
   public languages = new Set(this.getBooks().map((d) => d.language));
+  public minPages = this.getBooks().reduce((prev, curr) => prev.pagesCount < curr.pagesCount ? prev : curr).pagesCount;
+  public maxPages = this.getBooks().reduce((prev, curr) => prev.pagesCount > curr.pagesCount ? prev : curr).pagesCount;
 
   public searchFilterToken = '';
   public authorFilterTokens: String[] = Array.from(this.authors);
   public languageFilterTokens: String[] = Array.from(this.languages);
+  public pageMinFilterToken = this.minPages;
+  public pageMaxFilterToken = this.maxPages;
   public filteredBooks = this.getBooks();
 
   constructor() {}
@@ -36,7 +40,9 @@ export class HomePage {
     this.filteredBooks = this.getBooks()
       .filter((d) => (d.title.toLowerCase().indexOf(this.searchFilterToken) > -1) || (d.author.toLowerCase().indexOf(this.searchFilterToken) > -1))
       .filter((d) => this.authorFilterTokens.includes(d.author))
-      .filter((d) => this.languageFilterTokens.includes(d.language));
+      .filter((d) => this.languageFilterTokens.includes(d.language))
+      .filter((d) => d.pagesCount >= this.pageMinFilterToken)
+      .filter((d) => d.pagesCount <= this.pageMaxFilterToken);
   }
 
   handleSearchInput(event: IonSearchbarCustomEvent<SearchbarInputEventDetail>) {
@@ -55,4 +61,17 @@ export class HomePage {
     this.languageFilterTokens = query.length > 0 ? query : Array.from(this.languages);
     this.runGeneralFilter();
   }
+
+  handleFilterByPagesMin(event: IonInputCustomEvent<InputInputEventDetail>) {
+    const query = event.detail.value;
+    this.pageMinFilterToken = query ? Number(query) : this.minPages;
+    this.runGeneralFilter();
+  }
+
+  handleFilterByPagesMax(event: IonInputCustomEvent<InputInputEventDetail>) {
+    const query = event.detail.value;
+    this.pageMaxFilterToken = query ? Number(query) : this.maxPages;
+    this.runGeneralFilter();
+  }
+  
 }
