@@ -65,4 +65,11 @@ export class DataService {
   public getBookById(id: number): Book {
     return this.books[id];
   }
+
+  public addBook(book: Omit<Book, 'id'>) {
+    this.books.push({
+      ...book,
+      id: this.books.reduce((prev, curr) => prev.id > curr.id ? prev : curr).id + 1,
+    });
+  }
 }
