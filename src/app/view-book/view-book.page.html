@@ -21,5 +21,8 @@
     <p>
       Pages: <em>{{ book.pagesCount }}</em>
     </p>
+    <p *ngIf="book.description">
+      Description: <em>{{ book.description }}</em>
+    </p>
   </div>
 </ion-content>

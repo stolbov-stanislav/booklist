@@ -7,6 +7,7 @@ export interface Book {
   pagesCount: number;
   language: string;
   genre: string;
+  description?: string;
 }
 
 @Injectable({
