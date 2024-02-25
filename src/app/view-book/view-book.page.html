@@ -7,22 +7,24 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="book">
-  <div class="ion-padding">
-    <h1>{{ book.title }}</h1>
-    <p>
+  <ion-list>
+    <ion-item>
+      <h1>{{ book.title }}</h1>
+    </ion-item>
+    <ion-item>
       Author: <em>{{ book.author }}</em>
-    </p>
-    <p>
+    </ion-item>
+    <ion-item>
       Genre: <em>{{ book.genre }}</em>
-    </p>
-    <p>
+    </ion-item>
+    <ion-item>
       Language: <em>{{ book.language }}</em>
-    </p>
-    <p>
+    </ion-item>
+    <ion-item>
       Pages: <em>{{ book.pagesCount }}</em>
-    </p>
-    <p *ngIf="book.description">
+    </ion-item>
+    <ion-item *ngIf="book.description">
       Description: <em>{{ book.description }}</em>
-    </p>
-  </div>
+    </ion-item>
+  </ion-list>
 </ion-content>
