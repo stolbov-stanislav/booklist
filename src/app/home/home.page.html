@@ -26,8 +26,9 @@
           <ion-select-option *ngFor="let genre of genres" value={{genre}}>{{genre}}</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-item [routerLink]="'/book/create'">
-        <ion-button>Add book</ion-button>
+      <ion-item>
+        <ion-button [routerLink]="'/book/create'">Add book</ion-button>
+        <ion-button [routerLink]="'/author/edit'">Edit authors</ion-button>
       </ion-item>
     </ion-list>
   </ion-toolbar>

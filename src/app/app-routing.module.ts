@@ -15,6 +15,10 @@ const routes: Routes = [
     loadChildren: () => import('./view-book/view-book.module').then( m => m.ViewBookPageModule)
   },
   {
+    path: 'author/edit',
+    loadChildren: () => import('./edit-author/edit-author.module').then( m => m.EditAuthorPageModule)
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

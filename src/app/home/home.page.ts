@@ -12,7 +12,7 @@ import { DataService, Book } from '../services/data.service';
 export class HomePage {
   private data = inject(DataService);
 
-  public authors = new Set(this.getBooks().map((d) => d.author));
+  public authors = this.data.getAuthors();
   public languages = new Set(this.getBooks().map((d) => d.language));
   public minPages = this.getBooks().reduce((prev, curr) => prev.pagesCount < curr.pagesCount ? prev : curr).pagesCount;
   public maxPages = this.getBooks().reduce((prev, curr) => prev.pagesCount > curr.pagesCount ? prev : curr).pagesCount;
@@ -55,7 +55,7 @@ export class HomePage {
 
   handleFilterByAuthor(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
     const query: String[] = event.detail.value;
-    this.authorFilterTokens = query.length > 0 ? query : Array.from(this.authors);
+    this.authorFilterTokens = query.length > 0 ? query : this.authors;
     this.runGeneralFilter();
   }
 

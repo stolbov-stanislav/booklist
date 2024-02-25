@@ -15,7 +15,7 @@ export class CreateBookPage {
 
   public bookCreationForm: FormGroup;
   public isBookCreationFormValid = true;
-  public authors = new Set(this.data.getBooks().map((d) => d.author));
+  public authors = this.data.getAuthors();
   public languages = new Set(this.data.getBooks().map((d) => d.language));
 
   constructor(

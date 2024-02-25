@@ -57,6 +57,8 @@ export class DataService {
     },
   ];
 
+  public authors: Set<Book[`author`]> = new Set(this.books.map((v) => v.author));
+
   constructor() { }
 
   public getBooks(): Book[] {
@@ -72,5 +74,18 @@ export class DataService {
       ...book,
       id: this.books.reduce((prev, curr) => prev.id > curr.id ? prev : curr).id + 1,
     });
+  }
+
+  public getAuthors(): Book[`author`][] {
+    return Array.from(this.authors);
+  }
+
+  public addAuthor(author: Book[`author`]) {
+    this.authors.add(author);
+  }
+
+  public editAuthor(author: Book[`author`], newAuthor: Book[`author`]) {
+    this.authors.delete(author);
+    this.authors.add(newAuthor);
   }
 }

@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [text]="getBackButtonText()" defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-list>
+      <form [formGroup]="authorCreationForm" (ngSubmit)="submitCreationForm()" novalidate>
+        <ion-item>
+          <ion-input placeholder="Enter new author name" formControlName="author" required></ion-input>
+          <ion-button type="submit" color="success" expand="block" size="default">Add</ion-button>
+        </ion-item>
+      </form>
+  
+      <form [formGroup]="authorEditionForm" (ngSubmit)="submitEditionForm()" novalidate>
+        <ion-item>
+          <ion-select aria-label="Author" placeholder="Select author" formControlName="author">
+            <ion-select-option *ngFor="let author of authors" value={{author}}>{{author}}</ion-select-option>
+          </ion-select>
+          <ion-input placeholder="Enter edited author name" formControlName="newAuthor" required></ion-input>
+          <ion-button type="submit" color="warning" expand="block" size="default">EDIT</ion-button>
+        </ion-item>
+      </form>
+    </ion-list>
+
+</ion-content>
