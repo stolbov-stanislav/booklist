@@ -9,16 +9,16 @@ import { DataService, Book } from '../services/data.service';
   styleUrls: ['./view-book.page.scss'],
 })
 export class ViewBookPage implements OnInit {
-  public book!: Book;
+  public book?: Book;
   private data = inject(DataService);
   private activatedRoute = inject(ActivatedRoute);
   private platform = inject(Platform);
 
   constructor() {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id') as string;
-    this.book = this.data.getBookById(parseInt(id, 10));
+    this.book = await this.data.getBookById(parseInt(id, 10));
   }
 
   getBackButtonText() {

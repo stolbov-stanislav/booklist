@@ -15,8 +15,8 @@ export class CreateBookPage {
 
   public bookCreationForm: FormGroup;
   public isBookCreationFormValid = true;
-  public authors = this.data.getAuthors();
-  public languages = new Set(this.data.getBooks().map((d) => d.language));
+  public authors: Book[`author`][] = [];
+  public languages: Set<Book[`language`]> = new Set();
 
   constructor(
     public formBuilder: FormBuilder,
@@ -30,7 +30,13 @@ export class CreateBookPage {
       language: [],
       genre: [],
     });
+    this.initAsyncProperties();
   }
+
+  async initAsyncProperties() {
+    this.authors = await this.data.getAuthors();
+    this.languages = new Set((await this.data.getBooks()).map((d) => d.language));
+  } 
 
   getBackButtonText() {
     const isIos = this.platform.is('ios')

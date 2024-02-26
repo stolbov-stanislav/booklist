@@ -16,7 +16,7 @@ export class EditAuthorPage {
   public authorCreationForm: FormGroup;
   public authorEditionForm: FormGroup;
 
-  public authors = this.data.getAuthors();
+  public authors: Book[`author`][] = [];
 
   constructor(
     public formBuilder: FormBuilder,
@@ -29,7 +29,12 @@ export class EditAuthorPage {
       author: [],
       newAuthor: [],
     });
+    this.initAsyncProperties();
   }
+
+  async initAsyncProperties() {
+    this.authors = await this.data.getAuthors();
+  } 
 
   getBackButtonText() {
     const isIos = this.platform.is('ios')

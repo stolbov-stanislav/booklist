@@ -12,21 +12,38 @@ import { DataService, Book } from '../services/data.service';
 export class HomePage {
   private data = inject(DataService);
 
-  public authors = this.data.getAuthors();
-  public languages = new Set(this.getBooks().map((d) => d.language));
-  public minPages = this.getBooks().reduce((prev, curr) => prev.pagesCount < curr.pagesCount ? prev : curr).pagesCount;
-  public maxPages = this.getBooks().reduce((prev, curr) => prev.pagesCount > curr.pagesCount ? prev : curr).pagesCount;
-  public genres = new Set(this.getBooks().map((d) => d.genre)).add('all');
+  public authors: Book[`author`][] = [];
+  public languages: Set<Book[`language`]> = new Set();
+  public minPages: number = 0;
+  public maxPages: number = 0;
+  public genres: Set<Book[`genre`]> = new Set();
 
   public searchFilterToken = '';
-  public authorFilterTokens: String[] = Array.from(this.authors);
-  public languageFilterTokens: String[] = Array.from(this.languages);
-  public pageMinFilterToken = this.minPages;
-  public pageMaxFilterToken = this.maxPages;
+  public authorFilterTokens: Book[`author`][] = [];
+  public languageFilterTokens: Book[`language`][] = [];
+  public pageMinFilterToken: number = 0;
+  public pageMaxFilterToken: number = 0;
   public genreFilterToken = '';
-  public filteredBooks = this.getBooks();
+  public filteredBooks: Book[] = [];
 
-  constructor() {}
+  constructor() {
+    this.initAsyncProperties();
+  }
+
+  async initAsyncProperties() {
+    const books = await this.data.getBooks();
+    this.authors = await this.data.getAuthors();
+    this.languages = new Set(books.map((d) => d.language));
+    this.minPages = books.reduce((prev, curr) => prev.pagesCount < curr.pagesCount ? prev : curr).pagesCount;
+    this.maxPages = books.reduce((prev, curr) => prev.pagesCount > curr.pagesCount ? prev : curr).pagesCount;
+    this.genres = new Set(books.map((d) => d.genre)).add('all');
+
+    this.authorFilterTokens = this.authors;
+    this.languageFilterTokens = Array.from(this.languages);
+    this.pageMinFilterToken = this.minPages;
+    this.pageMaxFilterToken = this.maxPages;
+    this.filteredBooks = books;
+  } 
 
   refresh(ev: any) {
     setTimeout(() => {
@@ -34,12 +51,8 @@ export class HomePage {
     }, 3000);
   }
 
-  getBooks(): Book[] {
-    return this.data.getBooks();
-  }
-
-  runGeneralFilter() {
-    this.filteredBooks = this.getBooks()
+  async runGeneralFilter() {
+    this.filteredBooks = (await this.data.getBooks())
       .filter((d) => (d.title.toLowerCase().indexOf(this.searchFilterToken) > -1) || (d.author.toLowerCase().indexOf(this.searchFilterToken) > -1))
       .filter((d) => this.authorFilterTokens.includes(d.author))
       .filter((d) => this.languageFilterTokens.includes(d.language))
@@ -54,13 +67,13 @@ export class HomePage {
   }
 
   handleFilterByAuthor(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
-    const query: String[] = event.detail.value;
+    const query: string[] = event.detail.value;
     this.authorFilterTokens = query.length > 0 ? query : this.authors;
     this.runGeneralFilter();
   }
 
   handleFilterByLanguage(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
-    const query: String[] = event.detail.value;
+    const query: string[] = event.detail.value;
     this.languageFilterTokens = query.length > 0 ? query : Array.from(this.languages);
     this.runGeneralFilter();
   }
