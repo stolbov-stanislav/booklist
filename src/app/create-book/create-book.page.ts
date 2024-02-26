@@ -3,6 +3,8 @@ import { Platform } from '@ionic/angular';
 import { DataService, Book } from '../services/data.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable, from } from 'rxjs';
+import { liveQuery } from 'dexie';
 
 @Component({
   selector: 'app-create-book',
@@ -15,7 +17,7 @@ export class CreateBookPage {
 
   public bookCreationForm: FormGroup;
   public isBookCreationFormValid = true;
-  public authors: Book[`author`][] = [];
+  public authors!: Observable<Book[`author`][]>;
   public languages: Set<Book[`language`]> = new Set();
 
   constructor(
@@ -34,7 +36,7 @@ export class CreateBookPage {
   }
 
   async initAsyncProperties() {
-    this.authors = await this.data.getAuthors();
+    this.authors = from(liveQuery(() => this.data.getAuthors()));
     this.languages = new Set((await this.data.getBooks()).map((d) => d.language));
   } 
 

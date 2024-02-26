@@ -2,7 +2,8 @@ import { Component, inject } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { DataService, Book } from '../services/data.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Observable, from } from 'rxjs';
+import { liveQuery } from 'dexie';
 
 @Component({
   selector: 'app-edit-author',
@@ -16,11 +17,12 @@ export class EditAuthorPage {
   public authorCreationForm: FormGroup;
   public authorEditionForm: FormGroup;
 
-  public authors: Book[`author`][] = [];
+  public authors!: Observable<Book[`author`][]>;
+  public isActionCompleted = false;
+  public actionResult: 'danger' | 'success' | 'warning' = 'danger';
 
   constructor(
     public formBuilder: FormBuilder,
-    private router: Router,
   ) {
     this.authorCreationForm = this.formBuilder.group({
       author: [],
@@ -33,7 +35,7 @@ export class EditAuthorPage {
   }
 
   async initAsyncProperties() {
-    this.authors = await this.data.getAuthors();
+    this.authors = from(liveQuery(() => this.data.getAuthors()));
   } 
 
   getBackButtonText() {
@@ -41,20 +43,29 @@ export class EditAuthorPage {
     return isIos ? 'Books' : '';
   }
 
-  submitCreationForm = () => {
+  submitCreationForm = async () => {
+    this.isActionCompleted = false;
     const author = this.authorCreationForm.value.author;
     if (author) {
-      this.data.addAuthor(author);
-      this.router.navigate(['/']);
+      try {
+        await this.data.addAuthor(author);
+        this.isActionCompleted = !this.isActionCompleted;
+        this.actionResult = 'success';
+      }
+      catch (e) {
+        this.actionResult = 'danger';
+      }
     }
   };
 
   submitEditionForm = () => {
+    this.isActionCompleted = false;
     const author = this.authorEditionForm.value.author;
     const newAuthor = this.authorEditionForm.value.newAuthor;
     if (author && newAuthor) {
       this.data.editAuthor(author, newAuthor);
-      this.router.navigate(['/']);
+      this.isActionCompleted = !this.isActionCompleted;
+      this.actionResult = 'warning';
     }
   };
 }

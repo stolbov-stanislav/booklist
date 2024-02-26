@@ -18,12 +18,16 @@
       <form [formGroup]="authorEditionForm" (ngSubmit)="submitEditionForm()" novalidate>
         <ion-item>
           <ion-select aria-label="Author" placeholder="Select author" formControlName="author">
-            <ion-select-option *ngFor="let author of authors" value={{author}}>{{author}}</ion-select-option>
+            <ion-select-option *ngFor="let author of authors | async" value={{author}}>{{author}}</ion-select-option>
           </ion-select>
           <ion-input placeholder="Enter edited author name" formControlName="newAuthor" required></ion-input>
           <ion-button type="submit" color="warning" expand="block" size="default">EDIT</ion-button>
         </ion-item>
       </form>
+
+      <ion-item *ngIf="isActionCompleted">
+        <ion-label [color]="actionResult">Action completed.</ion-label>
+      </ion-item>
     </ion-list>
 
 </ion-content>

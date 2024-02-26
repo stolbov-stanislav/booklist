@@ -3,6 +3,8 @@ import { RefresherCustomEvent, SearchbarInputEventDetail, SelectChangeEventDetai
 import { IonSearchbarCustomEvent, IonSelectCustomEvent, IonInputCustomEvent, InputInputEventDetail } from '@ionic/core';
 
 import { DataService, Book } from '../services/data.service';
+import { Observable, firstValueFrom, from } from 'rxjs';
+import { liveQuery } from 'dexie';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +14,7 @@ import { DataService, Book } from '../services/data.service';
 export class HomePage {
   private data = inject(DataService);
 
-  public authors: Book[`author`][] = [];
+  public authors!: Observable<Book[`author`][]>;
   public languages: Set<Book[`language`]> = new Set();
   public minPages: number = 0;
   public maxPages: number = 0;
@@ -32,13 +34,13 @@ export class HomePage {
 
   async initAsyncProperties() {
     const books = await this.data.getBooks();
-    this.authors = await this.data.getAuthors();
+    this.authors = from(liveQuery(() => this.data.getAuthors()));
     this.languages = new Set(books.map((d) => d.language));
     this.minPages = books.reduce((prev, curr) => prev.pagesCount < curr.pagesCount ? prev : curr).pagesCount;
     this.maxPages = books.reduce((prev, curr) => prev.pagesCount > curr.pagesCount ? prev : curr).pagesCount;
     this.genres = new Set(books.map((d) => d.genre)).add('all');
 
-    this.authorFilterTokens = this.authors;
+    this.authorFilterTokens = await firstValueFrom(this.authors);
     this.languageFilterTokens = Array.from(this.languages);
     this.pageMinFilterToken = this.minPages;
     this.pageMaxFilterToken = this.maxPages;
@@ -66,9 +68,9 @@ export class HomePage {
     this.runGeneralFilter();
   }
 
-  handleFilterByAuthor(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
+  async handleFilterByAuthor(event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
     const query: string[] = event.detail.value;
-    this.authorFilterTokens = query.length > 0 ? query : this.authors;
+    this.authorFilterTokens = query.length > 0 ? query : await firstValueFrom(this.authors);
     this.runGeneralFilter();
   }
 

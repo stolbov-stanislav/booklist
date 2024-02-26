@@ -15,7 +15,7 @@
 
       <ion-item>
         <ion-select aria-label="Author" placeholder="Select author" formControlName="author">
-          <ion-select-option *ngFor="let author of authors" value={{author}}>{{author}}</ion-select-option>
+          <ion-select-option *ngFor="let author of authors | async" value={{author}}>{{author}}</ion-select-option>
         </ion-select>
       </ion-item>
     
