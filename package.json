@@ -9,6 +9,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "pree2e": "npx tsc --project tsconfig.e2e.json",
+    "e2e": "npx protractor ./dist/protractor.config.js",
     "lint": "ng lint"
   },
   "private": true,
@@ -29,8 +31,10 @@
     "@ionic/angular": "^7.0.0",
     "dexie": "^3.2.5",
     "ionicons": "^7.0.0",
+    "protractor": "^7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "webdriver-manager": "^12.1.9",
     "zone.js": "~0.14.2"
   },
   "devDependencies": {

@@ -47,7 +47,7 @@
     </ion-toolbar>
   </ion-header>
   
-  <ion-list>
-    <app-book *ngFor="let book of filteredBooks" [book]="book"></app-book>
+  <ion-list class="book-list">
+    <app-book *ngFor="let book of filteredBooks" [book]="book" class="book-item"></app-book>
   </ion-list>
 </ion-content>
