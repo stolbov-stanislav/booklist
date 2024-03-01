@@ -54,13 +54,14 @@ export class HomePage {
   }
 
   async runGeneralFilter() {
-    this.filteredBooks = (await this.data.getBooks())
-      .filter((d) => (d.title.toLowerCase().indexOf(this.searchFilterToken) > -1) || (d.author.toLowerCase().indexOf(this.searchFilterToken) > -1))
-      .filter((d) => this.authorFilterTokens.includes(d.author))
-      .filter((d) => this.languageFilterTokens.includes(d.language))
-      .filter((d) => d.pagesCount >= this.pageMinFilterToken)
-      .filter((d) => d.pagesCount <= this.pageMaxFilterToken)
-      .filter((d) => this.genreFilterToken ? d.genre === this.genreFilterToken: true);
+    this.filteredBooks = await DataService
+      .collectionFilter(this.data.getBooksCollection(), (d) => (d.title.toLowerCase().indexOf(this.searchFilterToken) > -1) || (d.author.toLowerCase().indexOf(this.searchFilterToken) > -1))
+      .pipe((d) => this.authorFilterTokens.includes(d.author))
+      .pipe((d) => this.languageFilterTokens.includes(d.language))
+      .pipe((d) => d.pagesCount >= this.pageMinFilterToken)
+      .pipe((d) => d.pagesCount <= this.pageMaxFilterToken)
+      .pipe((d) => this.genreFilterToken ? d.genre === this.genreFilterToken: true)
+      .collection.toArray();
   }
 
   handleSearchInput(event: IonSearchbarCustomEvent<SearchbarInputEventDetail>) {

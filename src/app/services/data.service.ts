@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Dexie, { Table } from 'dexie';
+import Dexie, { Collection, Table } from 'dexie';
 
 export interface Book {
   title: string;
@@ -62,9 +62,9 @@ export class DataService extends Dexie {
   public authors!: Table<Author, number>;
 
   constructor() {
-    super('ngdexieliveQuery');
-    this.version(3).stores({
-      books: '++id',
+    super('books-db');
+    this.version(1).stores({
+      books: '++id, author, pages, language, genre',
       authors: '++id, &name',
     });
     this.on('populate', () => this.populate());
@@ -88,6 +88,20 @@ export class DataService extends Dexie {
     catch (e) {
       throw new Error(`DataService clearAll error: ${e}`);
     }
+  }
+
+  static collectionFilter(collection: Collection, filterFunction: (x: Book) => boolean) {
+    const filteredCollection = collection.filter(filterFunction);
+    return {
+      collection: filteredCollection,
+      pipe(filterFunction: (x: Book) => boolean) {
+        return DataService.collectionFilter(this.collection, filterFunction);
+      },
+    };
+  }
+
+  public getBooksCollection() {
+    return this.books.toCollection();
   }
 
   public getBooks(): Promise<Book[]> {
